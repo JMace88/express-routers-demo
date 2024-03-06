@@ -10,15 +10,30 @@ async function getAllFoods() {
 async function addNewFood(food) {
   const { name, calories } = food;
 
-  const { rows: [addedFood] } = await client.query(
+  const {
+    rows: [addedFood],
+  } = await client.query(
     `
 INSERT INTO foods(name, calories)
 VALUES ($1,$2) RETURNING *;`,
     [name, calories]
   );
 
-  console.log(addedFood)
-  return addedFood
+  console.log(addedFood);
+  return addedFood;
 }
 
-module.exports = { getAllFoods, addNewFood };
+async function getFoodById(id) {
+  const {
+    rows: [food],
+  } = await client.query(
+    `
+    SELECT * FROM foods
+    WHERE id = $1
+    `,
+    [id]
+  );
+  return food;
+}
+
+module.exports = { getAllFoods, addNewFood, getFoodById };

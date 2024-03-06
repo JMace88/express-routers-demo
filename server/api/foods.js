@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { getAllFoods, addNewFood } = require('../db/foods');
+const { getAllFoods, addNewFood, getFoodById } = require('../db/foods');
 
 // The endpoint is /api/foods
 router.get('/', async (req, res, next) => {
@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    console.log('REQ.BODY:', req.body)
+    console.log('REQ.BODY:', req.body);
     const newFood = await addNewFood(req.body);
     res.send(newFood);
   } catch (err) {
@@ -24,8 +24,12 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// Full route: /api/foods/:name
-router.get('/:name', (req, res) => {});
+// Full route: /api/foods/:id
+router.get('/:id', async (req, res) => {
+  const id = req.params.id;
+  let food = await getFoodById(id);
+  res.send(food);
+});
 
 // Full route: /api/foods/:id
 router.delete('/:id', (req, res) => {});
